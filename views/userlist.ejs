@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Userlist</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1>User List</h1>
+    <ul>
+    	<% userlist.forEach(function(user) { %>
+    		<li><%= link_to(user.username, 'mailto:' + user.email) %></li>
+    	<% }); %>
+    </ul>
+  </body>
+</html>
