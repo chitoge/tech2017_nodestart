@@ -8,8 +8,9 @@
     <h1>User List</h1>
     <ul>
     	<% userlist.forEach(function(user) { %>
-    		<li><%= link_to(user.username, 'mailto:' + user.email) %></li>
+        <li><a href='<%= "mailto:" + user.email %>'><%= user.username %></a></li>
     	<% }); %>
     </ul>
+    <a href="/newuser">Create a new user</a>
   </body>
 </html>

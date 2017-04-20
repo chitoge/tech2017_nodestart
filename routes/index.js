@@ -1,5 +1,14 @@
 var express = require('express');
+var mongoose = require('mongoose');
 var router = express.Router();
+var Schema = mongoose.Schema;
+
+var UserSchema = new Schema({
+  username: String,
+  email: String
+}, { collection: 'usercollection' });
+
+var User = mongoose.model('User', UserSchema);
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -13,12 +22,10 @@ router.get('/helloworld', function(req, res) {
 
 /* GET Userlist page. */
 router.get('/userlist', function(req, res) {
-  var db = req.db;
-  var collection = db.get('usercollection');
-  collection.find({}, {}, function(e, docs) {
-    res.render('userlist', {
-      "userlist" : docs
-    });
+  User.find((err, docs) => {
+  	if (err) res.send(err);
+
+  	res.render('userlist', {"userlist": docs});
   });
 });
 
@@ -29,23 +36,13 @@ router.get('/newuser', function(req, res) {
 
 /* POST to Add User Service */
 router.post('/adduser', function(req, res) {
-
-  // Set our internal DB variable
-  var db = req.db;
-
   // Get our form values. These rely on the "name" attributes
   var userName = req.body.username;
   var userEmail = req.body.useremail;
 
-  // Set our collection
-  var collection = db.get('usercollection');
-
   // Submit to the DB
-  collection.insert({
-    "username" : userName,
-    "email" : userEmail
-  }, function (err, doc) {
-    if (err) {
+  User.create({username: userName, email: userEmail}, (err, user) => {
+  	if (err) {
       // If it failed, return error
       res.send("There was a problem adding the information to the database.");
     }
